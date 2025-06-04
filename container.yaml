@@ -1,0 +1,149 @@
+# Azure Container App Configuration for Veena TTS
+# This file defines the container app configuration with GPU support
+
+apiVersion: apps/v1
+kind: ContainerApp
+metadata:
+  name: veena-tts-app
+  resourceGroup: veena-tts-rg
+spec:
+  managedEnvironmentId: /subscriptions/{subscription-id}/resourceGroups/veena-tts-rg/providers/Microsoft.App/managedEnvironments/veena-tts-env
+  
+  configuration:
+    activeRevisionsMode: Single
+    ingress:
+      external: true
+      targetPort: 8000
+      allowInsecure: false
+      traffic:
+        - weight: 100
+          latestRevision: true
+    
+    registries:
+      - server: veenattscr.azurecr.io
+        identity: system
+    
+    secrets:
+      - name: hf-token
+        keyVaultUrl: https://veena-tts-kv.vault.azure.net/secrets/hf-token
+        identity: system
+      - name: storage-key
+        keyVaultUrl: https://veena-tts-kv.vault.azure.net/secrets/storage-key
+        identity: system
+    
+    volumes:
+      - name: model-cache
+        storageType: AzureFile
+        storageName: model-cache-storage
+  
+  template:
+    revisionSuffix: v1
+    
+    containers:
+      - name: veena-tts
+        image: veenattscr.azurecr.io/veena-tts:latest
+        
+        env:
+          - name: HF_TOKEN
+            secretRef: hf-token
+          - name: AZURE_STORAGE_ACCOUNT
+            value: veenattsstorage
+          - name: AZURE_STORAGE_SHARE
+            value: model-cache
+          - name: AZURE_KEY_VAULT_URL
+            value: https://veena-tts-kv.vault.azure.net/
+          - name: PYTORCH_CUDA_ERROR_REPORTING
+            value: "0"
+          - name: VLLM_ENGINE_ITERATION_TIMEOUT_S
+            value: "120"
+          - name: VLLM_WORKER_MULTIPROC_METHOD
+            value: spawn
+          - name: VEENA_CACHE_PATH
+            value: /mnt/model-cache/veena
+          - name: SNAC_CACHE_PATH
+            value: /mnt/model-cache/snac
+        
+        resources:
+          cpu: 4
+          memory: 32Gi
+          # GPU configuration will be handled by workload profile
+        
+        volumeMounts:
+          - volumeName: model-cache
+            mountPath: /mnt/model-cache
+        
+        probes:
+          startup:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 60
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 30
+          
+          readiness:
+            httpGet:
+              path: /status
+              port: 8000
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 3
+          
+          liveness:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 300
+            periodSeconds: 30
+            timeoutSeconds: 10
+            failureThreshold: 3
+    
+    scale:
+      minReplicas: 0
+      maxReplicas: 3
+      rules:
+        - name: http-scaling
+          http:
+            metadata:
+              concurrentRequests: "2"
+        - name: cpu-scaling
+          custom:
+            type: cpu
+            metadata:
+              type: Utilization
+              value: "70"
+    
+    # GPU workload profile
+    workloadProfileName: GPU
+  
+  identity:
+    type: SystemAssigned
+
+---
+# Storage configuration for Azure File Share
+apiVersion: v1
+kind: Storage
+metadata:
+  name: model-cache-storage
+  resourceGroup: veena-tts-rg
+spec:
+  azureFile:
+    accountName: veenattsstorage
+    accountKey: 
+      secretRef: storage-key
+    shareName: model-cache
+    accessMode: ReadWrite
+
+---
+# Workload Profile for GPU
+apiVersion: v1
+kind: WorkloadProfile
+metadata:
+  name: GPU
+  environmentName: veena-tts-env
+spec:
+  workloadProfileType: "NC24ads-A100-v4"  # Azure A100 GPU instance
+  minimumCount: 0
+  maximumCount: 3
