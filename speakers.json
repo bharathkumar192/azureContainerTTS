@@ -1,0 +1,92 @@
+{
+  "charu_soft": {
+    "id": "charu_soft",
+    "name": "Charu Soft",
+    "description": "Soft & Calm",
+    "gender": "female",
+    "language": "hindi",
+    "use_cases": ["meditation", "relaxation", "bedtime_stories", "calm_narration"],
+    "voice_characteristics": ["soft", "gentle", "soothing", "calm"]
+  },
+  "ishana_spark": {
+    "id": "ishana_spark", 
+    "name": "Ishana Spark",
+    "description": "Spark & Energetic",
+    "gender": "female",
+    "language": "hindi",
+    "use_cases": ["advertisements", "announcements", "energetic_content", "motivation"],
+    "voice_characteristics": ["energetic", "bright", "enthusiastic", "dynamic"]
+  },
+  "kyra_prime": {
+    "id": "kyra_prime",
+    "name": "Kyra Prime", 
+    "description": "Prime & Professional",
+    "gender": "female",
+    "language": "hindi",
+    "use_cases": ["business", "presentations", "formal_announcements", "corporate"],
+    "voice_characteristics": ["professional", "clear", "authoritative", "polished"]
+  },
+  "mohini_whispers": {
+    "id": "mohini_whispers",
+    "name": "Mohini Whispers",
+    "description": "ASMR & Whispers", 
+    "gender": "female",
+    "language": "hindi",
+    "use_cases": ["asmr", "relaxation", "sleep_aid", "intimate_narration"],
+    "voice_characteristics": ["whispery", "intimate", "relaxing", "gentle"]
+  },
+  "keerti_joy": {
+    "id": "keerti_joy",
+    "name": "Keerti Joy",
+    "description": "Joyful & Upbeat",
+    "gender": "female", 
+    "language": "hindi",
+    "use_cases": ["children_content", "entertainment", "cheerful_announcements", "celebrations"],
+    "voice_characteristics": ["joyful", "upbeat", "cheerful", "friendly"]
+  },
+  "varun_chat": {
+    "id": "varun_chat",
+    "name": "Varun Chat",
+    "description": "Conversational & Friendly",
+    "gender": "male",
+    "language": "hindi", 
+    "use_cases": ["chatbots", "conversational_ai", "customer_service", "casual_narration"],
+    "voice_characteristics": ["conversational", "friendly", "natural", "approachable"]
+  },
+  "soumya_calm": {
+    "id": "soumya_calm",
+    "name": "Soumya Calm",
+    "description": "Calm & Peaceful",
+    "gender": "female",
+    "language": "hindi",
+    "use_cases": ["meditation", "yoga", "mindfulness", "peaceful_content"],
+    "voice_characteristics": ["calm", "peaceful", "balanced", "serene"]
+  },
+  "agastya_impact": {
+    "id": "agastya_impact", 
+    "name": "Agastya Impact",
+    "description": "Impactful & Strong",
+    "gender": "male",
+    "language": "hindi",
+    "use_cases": ["documentaries", "serious_content", "news", "authoritative_announcements"],
+    "voice_characteristics": ["impactful", "strong", "commanding", "serious"]
+  },
+  "maitri_connect": {
+    "id": "maitri_connect",
+    "name": "Maitri Connect", 
+    "description": "Connecting & Warm",
+    "gender": "female",
+    "language": "hindi",
+    "use_cases": ["customer_support", "help_systems", "guidance", "supportive_content"],
+    "voice_characteristics": ["warm", "supportive", "connecting", "helpful"]
+  },
+  "vinaya_assist": {
+    "id": "vinaya_assist",
+    "name": "Vinaya Assist",
+    "description": "Assistant & Helpful", 
+    "gender": "female",
+    "language": "hindi",
+    "use_cases": ["virtual_assistant", "tutorials", "instructions", "helpful_guidance"],
+    "voice_characteristics": ["helpful", "clear", "instructional", "reliable"]
+  }
+} 
